@@ -5,7 +5,6 @@ namespace Habbit_Track_3_Meilenstein;
 
 class Program
 {
-    System.Console.WriteLine("test");
     // Initialization code. Don't use any Avalonia, third-party APIs or any
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.

@@ -1407,19 +1407,19 @@
     ]
   },
   "packageFolders": {
-    "/home/nicolas/.nuget/packages/": {}
+    "/home/drugos/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/nicolas/ohm/2.Semester/OOP/Meilenstein/3_Meilenstein_OOP_Ue/Habbit_Track_3-Meilenstein/Habbit_Track_3-Meilenstein.csproj",
+      "projectUniqueName": "/home/drugos/Studium/2. Semester/OOP/3. Meilenstein/Habbit_Track_3-Meilenstein/Habbit_Track_3-Meilenstein.csproj",
       "projectName": "Habbit_Track_3-Meilenstein",
-      "projectPath": "/home/nicolas/ohm/2.Semester/OOP/Meilenstein/3_Meilenstein_OOP_Ue/Habbit_Track_3-Meilenstein/Habbit_Track_3-Meilenstein.csproj",
-      "packagesPath": "/home/nicolas/.nuget/packages/",
-      "outputPath": "/home/nicolas/ohm/2.Semester/OOP/Meilenstein/3_Meilenstein_OOP_Ue/Habbit_Track_3-Meilenstein/obj/",
+      "projectPath": "/home/drugos/Studium/2. Semester/OOP/3. Meilenstein/Habbit_Track_3-Meilenstein/Habbit_Track_3-Meilenstein.csproj",
+      "packagesPath": "/home/drugos/.nuget/packages/",
+      "outputPath": "/home/drugos/Studium/2. Semester/OOP/3. Meilenstein/Habbit_Track_3-Meilenstein/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/nicolas/.nuget/NuGet/NuGet.Config"
+        "/home/drugos/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
