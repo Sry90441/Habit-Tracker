@@ -1,0 +1,5 @@
+interface IActivity
+{
+    void CheckedInOnTime();
+    
+}
