@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/drugos/Studium/2. Semester/OOP/3. Meilenstein/Habit-Tracker/Habit-Tracker.csproj": {}
+    "/home/nicolas/ohm/2.Semester/OOP/Meilenstein/3_Meilenstein_OOP_Ue/Habbit_Track_3-Meilenstein/Habbit_Track_3-Meilenstein.csproj": {}
   },
   "projects": {
-    "/home/drugos/Studium/2. Semester/OOP/3. Meilenstein/Habit-Tracker/Habit-Tracker.csproj": {
+    "/home/nicolas/ohm/2.Semester/OOP/Meilenstein/3_Meilenstein_OOP_Ue/Habbit_Track_3-Meilenstein/Habbit_Track_3-Meilenstein.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/drugos/Studium/2. Semester/OOP/3. Meilenstein/Habit-Tracker/Habit-Tracker.csproj",
-        "projectName": "Habit-Tracker",
-        "projectPath": "/home/drugos/Studium/2. Semester/OOP/3. Meilenstein/Habit-Tracker/Habit-Tracker.csproj",
-        "packagesPath": "/home/drugos/.nuget/packages/",
-        "outputPath": "/home/drugos/Studium/2. Semester/OOP/3. Meilenstein/Habit-Tracker/obj/",
+        "projectUniqueName": "/home/nicolas/ohm/2.Semester/OOP/Meilenstein/3_Meilenstein_OOP_Ue/Habbit_Track_3-Meilenstein/Habbit_Track_3-Meilenstein.csproj",
+        "projectName": "Habbit_Track_3-Meilenstein",
+        "projectPath": "/home/nicolas/ohm/2.Semester/OOP/Meilenstein/3_Meilenstein_OOP_Ue/Habbit_Track_3-Meilenstein/Habbit_Track_3-Meilenstein.csproj",
+        "packagesPath": "/home/nicolas/.nuget/packages/",
+        "outputPath": "/home/nicolas/ohm/2.Semester/OOP/Meilenstein/3_Meilenstein_OOP_Ue/Habbit_Track_3-Meilenstein/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/drugos/.nuget/NuGet/NuGet.Config"
+          "/home/nicolas/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -43,6 +43,28 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
+          "dependencies": {
+            "Avalonia": {
+              "target": "Package",
+              "version": "[11.3.0, )"
+            },
+            "Avalonia.Desktop": {
+              "target": "Package",
+              "version": "[11.3.0, )"
+            },
+            "Avalonia.Diagnostics": {
+              "target": "Package",
+              "version": "[11.3.0, )"
+            },
+            "Avalonia.Fonts.Inter": {
+              "target": "Package",
+              "version": "[11.3.0, )"
+            },
+            "Avalonia.Themes.Fluent": {
+              "target": "Package",
+              "version": "[11.3.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
