@@ -5,8 +5,15 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Habbit_Track_3_Meilenstein.MainWindow"
         Title="Habbit_Track_3_Meilenstein">
-    <StackPanel Margin="20">
-        <Button Click="ClickHandler">Press Me!</Button>
-        <TextBlock Margin="0 10" x:Name="message">Ready...</TextBlock>
+    <StackPanel>
+        <TextBlock Text="Enter new Activity"/>
+        <StackPanel Orientation="Horizontal" Margin="0,20,0,20">
+            <TextBox x:Name="nameInput" 
+                     Width="300" 
+                     HorizontalAlignment="Left"
+                     Watermark="Name"/>
+            <Button Content="Hello button" Click="Button_Click"/>
+        </StackPanel>
+        <TextBlock x:Name="activityOutput"/>
     </StackPanel>
 </Window>

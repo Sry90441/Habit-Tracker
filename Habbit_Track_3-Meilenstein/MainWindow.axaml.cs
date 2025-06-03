@@ -10,8 +10,9 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
     }
-    public void ClickHandler(object sender, RoutedEventArgs args)
+    public void Button_Click(object sender, RoutedEventArgs e)
     {
-        message.Text = "Button pressed";
+        string userInput = nameInput.Text;
+        activityOutput.Text = $"You entered: {userInput}";
     }
 }
