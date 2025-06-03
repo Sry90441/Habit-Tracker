@@ -1,5 +1,6 @@
 using System;
 using Avalonia.Diagnostics;
+using Tmds.DBus.Protocol;
 
 class Activity
 {
@@ -11,8 +12,6 @@ class Activity
         TaskDone = 0;
         ActivityName = activityName;
         Date = DateTime.Now;
+
     }
-    
-    
-    
 }

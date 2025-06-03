@@ -9,6 +9,9 @@ class DailyActivity : Activity, IActivity
     }
     public void CheckedInOnTime()
     {
-        
+        /*if (Date == Date.Subtract())
+        {
+            
+        }*/
     }
 }

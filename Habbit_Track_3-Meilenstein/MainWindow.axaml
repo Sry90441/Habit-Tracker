@@ -5,5 +5,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Habbit_Track_3_Meilenstein.MainWindow"
         Title="Habbit_Track_3_Meilenstein">
-    Welcome to Avalonia!
+    <StackPanel Margin="20">
+        <Button Click="ClickHandler">Press Me!</Button>
+        <TextBlock Margin="0 10" x:Name="message">Ready...</TextBlock>
+    </StackPanel>
 </Window>
