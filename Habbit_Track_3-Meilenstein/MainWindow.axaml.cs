@@ -6,13 +6,14 @@ namespace Habbit_Track_3_Meilenstein;
 
 public partial class MainWindow : Window
 {
+    public string InputActivity { get; set; }
     public MainWindow()
     {
         InitializeComponent();
     }
     public void Button_Click(object sender, RoutedEventArgs e)
     {
-        string userInput = nameInput.Text;
-        activityOutput.Text = $"You entered: {userInput}";
+        string InputActivity = nameInput.Text;
+        activityOutput.Text += $"You entered: {InputActivity}\n";
     }
 }

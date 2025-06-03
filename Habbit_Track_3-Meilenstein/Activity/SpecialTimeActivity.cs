@@ -1,3 +1,5 @@
+using System;
+
 class SpecialTimeActivity : Activity, IActivity
 {
     public SpecialTimeActivity(string name, int count) : base(name)
@@ -6,6 +8,10 @@ class SpecialTimeActivity : Activity, IActivity
     }
     public void CheckedInOnTime()
     {
-
+        
     }
+    public DateTime WhenNeedToCheck()
+    {
+        return DateTime.Now;
+    }    
 }
