@@ -2,7 +2,7 @@ using System;
 
 class SpecialTimeActivity : Activity, IActivity
 {
-    public SpecialTimeActivity(string name, int count) : base(name)
+    public SpecialTimeActivity(string name) : base(name)
     {
 
     }

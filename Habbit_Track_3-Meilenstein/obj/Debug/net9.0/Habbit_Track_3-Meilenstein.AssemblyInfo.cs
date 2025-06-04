@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Habbit_Track_3-Meilenstein")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+10843a8027217f16c5d0deb902d24abe785f0fab")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+71c33276b047a122721bae5c2f5860444fc68302")]
 [assembly: System.Reflection.AssemblyProductAttribute("Habbit_Track_3-Meilenstein")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Habbit_Track_3-Meilenstein")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
