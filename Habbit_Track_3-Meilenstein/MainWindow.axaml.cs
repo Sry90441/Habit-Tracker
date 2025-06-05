@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -8,35 +12,68 @@ using Tmds.DBus.Protocol;
 
 namespace Habbit_Track_3_Meilenstein;
 
+public delegate void SaveActivityDelegate(List<ActivityItem> list, string filename = "SavedActivities");
+
 public partial class MainWindow : Window
 {
-    ActivityList<Activity> ActivityList = new ActivityList<Activity>();
+    List<ActivityItem> ActivityList = new List<ActivityItem>(); // reduces ActivityList to List for testing
     public string InputActivity { get; set; }
     public string Input_SelectedTime { get; set; }
     public MainWindow()
     {
         InitializeComponent();
     }
+
+    public static void SaveListToJson(List<ActivityItem> list, string filename)
+    {
+        var json = JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(filename, json);
+        System.Console.WriteLine("File saved successfully");
+    }
+
+    public SaveActivityDelegate saveMethod = SaveListToJson;
+
+    public void SaveAndExit_Click(object? sender, RoutedEventArgs e)
+    {
+        saveMethod(ActivityList);
+        Environment.Exit(0);
+    }
+
     public void Button_Click(object sender, RoutedEventArgs e)
     {
-        InputActivity = nameInput.Text;
+
+        InputActivity = nameInput.Text!;
+        if (string.IsNullOrWhiteSpace(nameInput.Text))
+        {
+            System.Console.WriteLine("Activity name cant be empty");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(Input_SelectedTime))
+        {
+            System.Console.WriteLine("Time-interval must be selected");
+            return;
+        }
+
         if (Input_SelectedTime == "Daily")
         {
-            ActivityList.Add(new DailyActivity(InputActivity));
+            ActivityList.Add(new ActivityItem(InputActivity!, new DailyActivity()));
         }
         else if (Input_SelectedTime == "Weekly")
         {
-            ActivityList.Add(new WeeklyActivity(InputActivity));
+            ActivityList.Add(new ActivityItem(InputActivity!, new WeeklyActivity()));
         }
         else if (Input_SelectedTime == "Monthly")
         {
             //Console.WriteLine($"{InputActivity} + {Input_SelectedTime}");
-            ActivityList.Add(new MonthlyActivity(InputActivity));
+            ActivityList.Add(new ActivityItem(InputActivity!, new MonthlyActivity()));
         }
+        /*
         else if (Input_SelectedTime == "Other")
         {
             ActivityList.Add(new SpecialTimeActivity(InputActivity));
         }
+        */
         //activityOutput.Text += $"{InputActivity}\n";
         var activitiesPanel = this.FindControl<StackPanel>("ActivitiesPanel");
         var border = new Border
@@ -88,7 +125,7 @@ public partial class MainWindow : Window
         panel.Children.Add(removeButton);
         border.Child = panel;
         activitiesPanel.Children.Add(border);
-        
+
     }
     public void ComboBox_TimeSpanSelect(object sender, SelectionChangedEventArgs e)
     {

@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace Habbit_Track_3_Meilenstein;
 
-class ActivityList<T>
+public class ActivityList<T>
 {
     private List<T> _activities = new List<T>();
     public void Add(T activity)
