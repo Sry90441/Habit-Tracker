@@ -1,52 +1,100 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"
-        d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="Habbit_Track_3_Meilenstein.MainWindow"
-        Title="Habbit_Track_3_Meilenstein">
+<Window
+    x:Class="Habbit_Track_3_Meilenstein.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Habbit_Track_3_Meilenstein"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
 
-    <StackPanel Margin="20">
-        <Button Content="Save and Exit"
-                Margin="0, 0, 10, 0"
+    <Grid
+        Margin="4"
+        ColumnDefinitions="50*,50*"
+        RowDefinitions="Auto, Auto, Auto">
+
+        <!--  Save and Exit Button  -->
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="2"
+            Margin="20">
+            <Button
                 Width="150"
+                Margin="0,0,10,0"
                 HorizontalAlignment="Right"
-                VerticalAlignment="Top"                    Click="SaveAndExit_Click"/>
-        <!-- Top row: ComboBox, TextBox, Button -->
-        <StackPanel Orientation="Horizontal">
-            <ComboBox x:Name="TimeSpanComboBox" SelectionChanged="ComboBox_TimeSpanSelect"
-                      Width="200"
-                      Height="30"
-                      Margin="0,0,10,0"
-                      VerticalAlignment="Top">
+                VerticalAlignment="Top"
+                Click="SaveAndExit_Click"
+                Content="Save and Exit" />
+        </StackPanel>
+
+        <!--  Top row: ComboBox, TextBox, Button  -->
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="20"
+            Orientation="Horizontal">
+            <ComboBox
+                x:Name="TimeSpanComboBox"
+                Width="200"
+                Height="30"
+                Margin="0,0,10,0"
+                VerticalAlignment="Top"
+                SelectionChanged="ComboBox_TimeSpanSelect">
                 <ComboBoxItem Content="Daily" />
                 <ComboBoxItem Content="Weekly" />
                 <ComboBoxItem Content="Monthly" />
                 <ComboBoxItem Content="Other" />
             </ComboBox>
 
-            <TextBox x:Name="nameInput"
-                     Width="200"
-                     Height="30"
-                     Margin="0,0,10,0"
-                     VerticalAlignment="Top"
-                     Watermark="Name"/>
+            <TextBox
+                x:Name="nameInput"
+                Width="200"
+                Height="30"
+                Margin="0,0,10,0"
+                VerticalAlignment="Top"
+                Watermark="Name" />
 
-            <Button Content="add Activity"
-                    Height="30"
-                    VerticalAlignment="Top"
-                    Click="Button_Click"/>
+            <Button
+                Height="30"
+                VerticalAlignment="Top"
+                Click="Button_Click"
+                Content="add Activity" />
 
         </StackPanel>
 
-        <!-- Output TextBlock below -->
-        <TextBlock x:Name="activityOutput"
-                   Margin="0,10,0,0"
-                   Foreground="White"/>
-        <StackPanel x:Name="ActivitiesPanel"
-                    HorizontalAlignment="Right"
-                    Margin="0,10,0,0"/>
+        <StackPanel>
+            <!--  Output TextBlock below  -->
+            <TextBlock
+                x:Name="activityOutput"
+                Margin="0,10,0,0"
+                Foreground="White" />
+            <StackPanel
+                x:Name="ActivitiesPanel"
+                Margin="0,10,0,0"
+                HorizontalAlignment="Right" />
 
-    </StackPanel>
+        </StackPanel>
+
+        <!-- Panel for ToDo -->
+        <StackPanel Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left">
+            <TextBlock
+                Margin="0,5"
+                FontWeight="Bold"
+                HorizontalAlignment="Left"
+                Text="ToDo:" />
+            <StackPanel x:Name="ActivitiesPanelLeft" />
+        </StackPanel>
+
+        <!-- Panel for Done -->
+        <StackPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right">
+            <TextBlock
+                Margin="0,5"
+                FontWeight="Bold"
+                HorizontalAlignment="Left"
+                Text="Done:" />
+            <StackPanel x:Name="ActivitiesPanelRight" />
+        </StackPanel>
+
+    </Grid>
 </Window>
