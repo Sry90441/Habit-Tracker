@@ -24,6 +24,8 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
+    // Save function
+    #region SaveFunction
     public static void SaveListToJson(List<ActivityItem> list, string filename)
     {
         var json = JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true });
@@ -39,6 +41,8 @@ public partial class MainWindow : Window
         Environment.Exit(0);
     }
 
+    // Function for creating new Item
+    #region NewItem
     public void Button_Click(object sender, RoutedEventArgs e)
     {
 
