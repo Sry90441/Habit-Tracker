@@ -9,7 +9,7 @@ public class DailyActivity : ActivityBase
 {
     public override DateTime GetDueDate(DateTime due)
     {
-        return due.AddDays(1);
+        return due.AddSeconds(10);
     }
 }
 

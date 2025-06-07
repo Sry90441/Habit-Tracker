@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using Avalonia;
@@ -16,6 +17,7 @@ public delegate void SaveActivityDelegate(List<ActivityItem> list, string filena
 public partial class MainWindow : Window
 {
     List<ActivityItem> ActivityList = new List<ActivityItem>(); // reduced ActivityList to List for testing
+    Dictionary<ActivityItem, Border> ActivityBorders = new Dictionary<ActivityItem, Border>();  // needed for storing the created item connected to the ui element
     public string InputActivity { get; set; }
     public string Input_SelectedTime { get; set; }
     public MainWindow()
@@ -40,6 +42,39 @@ public partial class MainWindow : Window
         Environment.Exit(0);
     }
     #endregion
+
+    // Refresh button
+    public void Refresh_Click(object sender, RoutedEventArgs e)
+    {
+        var activitiesPanelLeft = this.FindControl<StackPanel>("ActivitiesPanelLeft");
+        var activitiesPanelRight = this.FindControl<StackPanel>("ActivitiesPanelRight");
+        Border border;
+
+        // Check for due activities
+        foreach (var item in ActivityList)
+        {
+            if (DateTime.Now >= item.WhenNeedToCheck())
+            {
+                item.TaskDone = 0;
+
+                try
+                {
+                    ActivityBorders.TryGetValue(item, out border);
+                    if (border.Parent is Panel parentPanel)
+                    {
+                        parentPanel.Children.Remove(border);
+                    }
+                    
+                    activitiesPanelLeft.Children.Add(border);
+
+                }
+                catch (Exception ex)
+                {
+                    System.Console.WriteLine(ex.Message);
+                }
+            }
+        }
+    }
 
     // Function for creating new Item
     #region NewItemCreation
@@ -72,19 +107,23 @@ public partial class MainWindow : Window
             }
         }
 
+        ActivityItem newActivity = null;
+
         if (Input_SelectedTime == "Daily")
         {
-            ActivityList.Add(new ActivityItem(InputActivity!, new DailyActivity()));
+            newActivity = new ActivityItem(InputActivity!, new DailyActivity());
         }
         else if (Input_SelectedTime == "Weekly")
         {
-            ActivityList.Add(new ActivityItem(InputActivity!, new WeeklyActivity()));
+            newActivity = new ActivityItem(InputActivity!, new WeeklyActivity());
         }
         else if (Input_SelectedTime == "Monthly")
         {
-            //Console.WriteLine($"{InputActivity} + {Input_SelectedTime}");
-            ActivityList.Add(new ActivityItem(InputActivity!, new MonthlyActivity()));
+            newActivity = new ActivityItem(InputActivity!, new MonthlyActivity());
         }
+
+        ActivityList.Add(newActivity!);
+
         /*
         else if (Input_SelectedTime == "Other")
         {
@@ -104,6 +143,9 @@ public partial class MainWindow : Window
             Margin = new Thickness(0, 5),
             Padding = new Thickness(5)
         };
+
+        ActivityBorders[newActivity!] = border;
+
         var panel = new StackPanel { Orientation = Orientation.Horizontal };
 
         var textBlock = new TextBlock
@@ -132,6 +174,7 @@ public partial class MainWindow : Window
             if (activity != null)
             {
                 activity.TaskDone = 1;
+                activity.CheckedInOnTime();
                 System.Console.WriteLine($"{activityName} done!");
                 activitiesPanelLeft.Children.Remove(border);
 
@@ -183,24 +226,7 @@ public partial class MainWindow : Window
         border.Child = panel;
         activitiesPanelLeft.Children.Add(border);
 
-        // Check for due activities, idk if this is working
-        foreach (var item in ActivityList)
-        {
-            if (item.CheckedInOnTime == item.WhenNeedToCheck)
-            {
-                activitiesPanelRight.Children.Remove(border);
 
-                try
-                {
-                    activitiesPanelLeft.Children.Add(border);
-
-                }
-                catch (Exception ex)
-                {
-                    System.Console.WriteLine(ex.Message);
-                }
-            }
-        }
     }
     #endregion
     public void ComboBox_TimeSpanSelect(object sender, SelectionChangedEventArgs e)
