@@ -23,6 +23,42 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        LoadListFromJson(ActivityList, "SavedActivities");
+
+        foreach (var item in ActivityList)
+        {
+            CreateUI(item);
+        }
+    }
+    // Load function
+    public static void LoadListFromJson(List<ActivityItem> list, string filename)
+    {
+        try
+        {
+            if (File.Exists(filename) == false)
+            {
+                throw new ArgumentException("File does not exist");
+            }
+            else
+            {
+                string json = File.ReadAllText(filename);
+                var activities = JsonSerializer.Deserialize<List<ActivityItem>>(json);
+
+                list.Clear();
+                foreach (var item in activities)
+                {
+                    list.Add(item);
+                }
+                
+                System.Console.WriteLine("List loaded");
+
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Console.WriteLine(ex.Message);
+        }
+        
     }
 
     // Save function
@@ -63,9 +99,11 @@ public partial class MainWindow : Window
                     if (border.Parent is Panel parentPanel)
                     {
                         parentPanel.Children.Remove(border);
+                        border.Background = Brushes.White;
                     }
-                    
+
                     activitiesPanelLeft.Children.Add(border);
+                    
 
                 }
                 catch (Exception ex)
@@ -135,9 +173,17 @@ public partial class MainWindow : Window
         var activitiesPanelLeft = this.FindControl<StackPanel>("ActivitiesPanelLeft");
         var activitiesPanelRight = this.FindControl<StackPanel>("ActivitiesPanelRight");
 
+        CreateUI(newActivity);
+    }
+
+    public void CreateUI(ActivityItem newActivity)
+    {
+        var activitiesPanelLeft = this.FindControl<StackPanel>("ActivitiesPanelLeft");
+        var activitiesPanelRight = this.FindControl<StackPanel>("ActivitiesPanelRight");
+
         var border = new Border
         {
-            BorderBrush = Brushes.White,
+            BorderBrush = Brushes.Black,
             BorderThickness = new Thickness(1),
             CornerRadius = new CornerRadius(4),
             Margin = new Thickness(0, 5),
@@ -150,14 +196,14 @@ public partial class MainWindow : Window
 
         var textBlock = new TextBlock
         {
-            Text = $"{InputActivity}",
+            Text = newActivity.ActivityName,
             Width = 200,
             VerticalAlignment = VerticalAlignment.Center
         };
 
         var typeBlock = new TextBlock
         {
-            Text = $"Time-interval: {Input_SelectedTime}",
+            Text = newActivity.TimeIntervalType,
             Width = 200,
             VerticalAlignment = VerticalAlignment.Center
         };
@@ -173,7 +219,7 @@ public partial class MainWindow : Window
             var activity = ActivityList.Find(a => a.ActivityName == activityName); // For every a, compare a.ActivityName with activityName
             if (activity != null)
             {
-                activity.TaskDone = 1;
+                activity.TaskDone = 10;
                 activity.CheckedInOnTime();
                 System.Console.WriteLine($"{activityName} done!");
                 activitiesPanelLeft.Children.Remove(border);
@@ -181,6 +227,7 @@ public partial class MainWindow : Window
                 try
                 {
                     activitiesPanelRight.Children.Add(border);
+                    border.Background = Brushes.Green;
 
                 }
                 catch (Exception e)
@@ -202,7 +249,12 @@ public partial class MainWindow : Window
         partiallyButton.Click += (s, args) =>
         {
             var activityName = textBlock.Text;
-            System.Console.WriteLine($"{activityName}");
+            var activity = ActivityList.Find(a => a.ActivityName == activityName); // For every a, compare a.ActivityName with activityName
+            if (activity != null)
+            {
+                activity.TaskDone = 5;
+                border.Background = Brushes.Yellow;
+            }
         };
 
         var removeButton = new Button
@@ -224,7 +276,21 @@ public partial class MainWindow : Window
         panel.Children.Add(partiallyButton);
         panel.Children.Add(removeButton);
         border.Child = panel;
-        activitiesPanelLeft.Children.Add(border);
+        if (newActivity.TaskDone == 10)
+        {
+            activitiesPanelRight.Children.Add(border);
+            border.Background = Brushes.Green;
+        }
+        else if (newActivity.TaskDone == 5)
+        {
+            activitiesPanelLeft.Children.Add(border);
+            border.Background = Brushes.Yellow;
+        }
+        else
+        {
+            activitiesPanelLeft.Children.Add(border);
+        }
+        
 
 
     }

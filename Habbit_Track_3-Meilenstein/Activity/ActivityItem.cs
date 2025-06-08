@@ -1,11 +1,26 @@
 using System;
+using System.Collections;
+using System.Text.Json.Serialization;
 
 public class ActivityItem : IActivity
 {
     public string ActivityName { get; set; }
     public int TaskDone { get; set; }
     public DateTime DateStart { get; set; }
+
+    [JsonIgnore]
     public ActivityBase TimeInterval { get; set; }
+    // saving TimeInterval as string for Json
+    public string TimeIntervalType
+    {
+        get { return TimeInterval.GetType().Name; }
+        set { TimeInterval = LoadTimeIntervalFromString(value); }
+    }
+    public ActivityItem()
+    {
+        TaskDone = 0;
+        DateStart = DateTime.Now;
+    }
     public ActivityItem(string activityName, ActivityBase timeInterval)
     {
         TaskDone = 0;
@@ -13,6 +28,22 @@ public class ActivityItem : IActivity
         TimeInterval = timeInterval;
         DateStart = DateTime.Now.Date;
 
+    }
+
+    public ActivityBase LoadTimeIntervalFromString(string type)
+    {
+        switch (type)
+        {
+            case "DailyActivity":
+                return new DailyActivity();
+
+            case "WeeklyActivity":
+                return new WeeklyActivity();
+
+            case "MonthlyActivity":
+                return new MonthlyActivity();
+        }
+        throw new ArgumentException("Type not found");
     }
 
     // If the task is completed this time is set 
