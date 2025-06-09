@@ -5,6 +5,7 @@ using System.IO;
 using System.Text.Json;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Dialogs.Internal;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -12,7 +13,8 @@ using Avalonia.Media;
 
 namespace Habbit_Track_3_Meilenstein;
 
-public delegate void SaveActivityDelegate(List<ActivityItem> list, string filename = "SavedActivities");
+public delegate void SaveActivityDelegate(List<ActivityItem> list, string filename = "SavedActivities");    //Delegate for Save function
+public delegate void ActivityButtonClickAction(ActivityItem activity);  // Delegate for Button functions
 
 public partial class MainWindow : Window
 {
@@ -20,17 +22,48 @@ public partial class MainWindow : Window
     Dictionary<ActivityItem, Border> ActivityBorders = new Dictionary<ActivityItem, Border>();  // needed for storing the created item connected to the ui element
     public string InputActivity { get; set; }
     public string Input_SelectedTime { get; set; }
+    public ActivityButtonClickAction ActivityDoneMethod;
+    public ActivityButtonClickAction ActivityPartiallyDoneMethod;
+    public ActivityButtonClickAction DeleteActivityMethod;
+
     public MainWindow()
     {
         InitializeComponent();
         LoadListFromJson(ActivityList, "SavedActivities");
+
+        // Assign delegates to methods
+        ActivityDoneMethod = SetActivityDone;
+        ActivityPartiallyDoneMethod = SetActivityPartiallyDone;
+        DeleteActivityMethod = DeleteActivity;
 
         foreach (var item in ActivityList)
         {
             CreateUI(item);
         }
     }
+
+    // Button functions for delegates
+    public void SetActivityDone(ActivityItem activity)
+    {
+        activity.TaskDone = 10;
+        activity.CheckedInOnTime();
+        System.Console.WriteLine($"{activity.ActivityName} done!");
+    }
+
+    public void SetActivityPartiallyDone(ActivityItem activity)
+    {
+        activity.TaskDone = 5;
+        System.Console.WriteLine($"{activity.ActivityName} partially done!");
+    }
+
+    public void DeleteActivity(ActivityItem activity)
+    {
+        ActivityList.Remove(activity);
+        System.Console.WriteLine($"{activity.ActivityName} removed!");
+    }
+
     // Load function
+    #region LoadFunction
     public static void LoadListFromJson(List<ActivityItem> list, string filename)
     {
         try
@@ -49,7 +82,7 @@ public partial class MainWindow : Window
                 {
                     list.Add(item);
                 }
-                
+
                 System.Console.WriteLine("List loaded");
 
             }
@@ -58,8 +91,9 @@ public partial class MainWindow : Window
         {
             System.Console.WriteLine(ex.Message);
         }
-        
+
     }
+    #endregion
 
     // Save function
     #region SaveFunction
@@ -89,7 +123,7 @@ public partial class MainWindow : Window
         // Check for due activities
         foreach (var item in ActivityList)
         {
-            if (DateTime.Now >= item.WhenNeedToCheck())
+            if (DateTime.Now > item.WhenNeedToCheck())
             {
                 item.TaskDone = 0;
 
@@ -102,8 +136,9 @@ public partial class MainWindow : Window
                         border.Background = Brushes.White;
                     }
 
+
                     activitiesPanelLeft.Children.Add(border);
-                    
+
 
                 }
                 catch (Exception ex)
@@ -213,22 +248,32 @@ public partial class MainWindow : Window
             Content = "Done",
             Margin = new Thickness(5, 0, 0, 0)
         };
+
+        var partiallyButton = new Button
+        {
+            Content = "Partially",
+            Margin = new Thickness(5, 0, 0, 0)
+        };
+ 
+        var removeButton = new Button
+        {
+            Content = "Delete Activity",
+            Margin = new Thickness(5, 0, 0, 0)
+        };
+
         doneButton.Click += (s, args) =>
         {
             var activityName = textBlock.Text;
             var activity = ActivityList.Find(a => a.ActivityName == activityName); // For every a, compare a.ActivityName with activityName
             if (activity != null)
             {
-                activity.TaskDone = 10;
-                activity.CheckedInOnTime();
-                System.Console.WriteLine($"{activityName} done!");
+                ActivityDoneMethod(activity);   // Button function method delegate
                 activitiesPanelLeft.Children.Remove(border);
 
                 try
                 {
                     activitiesPanelRight.Children.Add(border);
                     border.Background = Brushes.Green;
-
                 }
                 catch (Exception e)
                 {
@@ -241,33 +286,35 @@ public partial class MainWindow : Window
             }
         };
 
-        var partiallyButton = new Button
-        {
-            Content = "Partially",
-            Margin = new Thickness(5, 0, 0, 0)
-        };
         partiallyButton.Click += (s, args) =>
         {
             var activityName = textBlock.Text;
             var activity = ActivityList.Find(a => a.ActivityName == activityName); // For every a, compare a.ActivityName with activityName
             if (activity != null)
             {
-                activity.TaskDone = 5;
-                border.Background = Brushes.Yellow;
+                if (activity.TaskDone != 10)
+                {
+                    ActivityPartiallyDoneMethod(activity);
+                    border.Background = Brushes.Yellow;
+                }
+                else
+                {
+                    System.Console.WriteLine("Can't set done activity to partially done!");
+                }
+                
             }
         };
 
-        var removeButton = new Button
-        {
-            Content = "Delete Activity",
-            Margin = new Thickness(5, 0, 0, 0)
-        };
         removeButton.Click += (s, args) =>
         {
             var activityName = textBlock.Text;
-            System.Console.WriteLine($"{activityName}");
-
-            ActivitiesPanel.Children.Remove(border);
+            var activity = ActivityList.Find(a => a.ActivityName == activityName);
+            if (activity != null)
+            {
+                DeleteActivityMethod(activity);
+                activitiesPanelLeft.Children.Remove(border);
+                activitiesPanelRight.Children.Remove(border);
+            }
         };
 
         panel.Children.Add(textBlock);
@@ -276,12 +323,13 @@ public partial class MainWindow : Window
         panel.Children.Add(partiallyButton);
         panel.Children.Add(removeButton);
         border.Child = panel;
+
         if (newActivity.TaskDone == 10)
         {
             activitiesPanelRight.Children.Add(border);
             border.Background = Brushes.Green;
         }
-        else if (newActivity.TaskDone == 5)
+        else if(newActivity.TaskDone == 5)
         {
             activitiesPanelLeft.Children.Add(border);
             border.Background = Brushes.Yellow;
@@ -290,7 +338,7 @@ public partial class MainWindow : Window
         {
             activitiesPanelLeft.Children.Add(border);
         }
-        
+
 
 
     }
