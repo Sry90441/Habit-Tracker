@@ -1,0 +1,74 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Habbit_Track_3_Meilenstein.TrackingWindow"
+        Width="800" Height="450"
+        Title="Activity Details">
+
+    <Grid 
+        Margin="4"
+        ColumnDefinitions="50*, 50*"
+        RowDefinitions="Auto, Auto, Auto">
+
+        <StackPanel    
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="20"
+            HorizontalAlignment="Left">
+
+            <TextBlock x:Name="ActivityNameText" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBlock x:Name="ActivityTypeText" FontSize="14" Margin="0,0,0,10"/>
+            <TextBlock x:Name="StatusText" FontSize="14" Margin="0,0,0,10"/>
+            <TextBlock x:Name="LastCheckedText" FontSize="14"/>
+
+        </StackPanel>
+        
+        
+
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="3"
+            Margin="20"
+            HorizontalAlignment="Right"
+            >
+            <Button
+                Name="SevenDays"
+                Width="75"
+                Margin="0,0,10,0"
+                Click="SevenDaysButton"
+                Content="7 Days"/>
+
+            <Button
+                Name="TwoWeeks"
+                Width="75"
+                Margin="0,0,10,0"
+                Click="TwoWeeksButton"
+                Content="2 Weeks"/>
+
+            <Button
+                Name="OneMonth"
+                Width="75"
+                Margin="0,0,10,0"
+                Click="OneMonthButton"
+                Content="1 Month"/>
+                
+            <Button
+                Name="SixMonths"
+                Width="75"
+                Margin="0,0,10,0" 
+                Click="SixMonthsButton"
+                Content="6 Months"/>
+        
+            <Button 
+                Name="AllTime"
+                Width="75"
+                Margin="0,0,10,0"
+                Click="AllTimeButton"
+                Content="Till Now"/>
+
+        </StackPanel>
+
+        
+
+        
+    </Grid>
+</Window>
