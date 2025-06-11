@@ -9,11 +9,11 @@ using Avalonia.Dialogs.Internal;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
-
+using Habbit_Track_3_Meilenstein;
 
 namespace Habbit_Track_3_Meilenstein;
 
-public delegate void SaveActivityDelegate(List<ActivityItem> list, string filename = "SavedActivities");    //Delegate for Save function
+public delegate void SaveActivityDelegate(List<ActivityItem> list, string filename = "LordHaveMercy");    //Delegate for Save function
 public delegate void ActivityButtonClickAction(ActivityItem activity);  // Delegate for Button functions
 
 public partial class MainWindow : Window
@@ -29,7 +29,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        LoadListFromJson(ActivityList, "SavedActivities");
+        LoadListFromJson(ActivityList, "LordHaveMercy");
 
         // Assign delegates to methods
         ActivityDoneMethod = SetActivityDone;
@@ -233,9 +233,15 @@ public partial class MainWindow : Window
         {
             Text = newActivity.ActivityName,
             Width = 200,
-            VerticalAlignment = VerticalAlignment.Center
+            VerticalAlignment = VerticalAlignment.Center,
+            Cursor = new Avalonia.Input.Cursor(Avalonia.Input.StandardCursorType.Hand),
+            Margin = new Thickness(5),
         };
-
+        textBlock.PointerPressed += (sender, args) =>
+        {
+            var trackingWindow = new TrackingWindow(newActivity);
+            trackingWindow.Show(); 
+        };
         var typeBlock = new TextBlock
         {
             Text = newActivity.TimeIntervalType,

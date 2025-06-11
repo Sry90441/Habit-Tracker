@@ -19,9 +19,3 @@ class ActivityList<T>
     public int Count => _activities.Count;
 }
 
-/*
-
-    Wenn done 
-    --> dann verschwindet es aus der Anzeige
-    --> wenn gelöscht verschwindet aus anzeige und lsite
-*/
