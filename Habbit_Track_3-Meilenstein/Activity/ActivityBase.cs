@@ -2,6 +2,7 @@ using System;
 
 public abstract class ActivityBase
 {
+    
     public abstract DateTime GetDueDate(DateTime due);
 }
 
@@ -9,7 +10,7 @@ public class DailyActivity : ActivityBase
 {
     public override DateTime GetDueDate(DateTime due)
     {
-        return due.AddSeconds(10);
+        return due.AddSeconds(15);
     }
 }
 

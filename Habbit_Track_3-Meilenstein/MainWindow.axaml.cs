@@ -5,6 +5,7 @@ using System.IO;
 using System.Text.Json;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Dialogs.Internal;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -13,12 +14,14 @@ using Habbit_Track_3_Meilenstein;
 
 namespace Habbit_Track_3_Meilenstein;
 
-public delegate void SaveActivityDelegate(List<ActivityItem> list, string filename = "LordHaveMercy");    //Delegate for Save function
+public delegate void SaveActivityDelegate(List<ActivityItem> list, string filename = "LordHaveMercy");
+public delegate void SaveTrackerDelegate(List<Tracker> list, string filename2 = "Tracking");    //Delegate for Save function
 public delegate void ActivityButtonClickAction(ActivityItem activity);  // Delegate for Button functions
 
 public partial class MainWindow : Window
 {
     List<ActivityItem> ActivityList = new List<ActivityItem>(); // reduced ActivityList to List for testing
+    List<Tracker> TrackerList = new List<Tracker>();
     Dictionary<ActivityItem, Border> ActivityBorders = new Dictionary<ActivityItem, Border>();  // needed for storing the created item connected to the ui element
     public string InputActivity { get; set; }
     public string Input_SelectedTime { get; set; }
@@ -30,6 +33,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         LoadListFromJson(ActivityList, "LordHaveMercy");
+        LoadListFromJson(TrackerList, "Tracking");
 
         // Assign delegates to methods
         ActivityDoneMethod = SetActivityDone;
@@ -64,7 +68,7 @@ public partial class MainWindow : Window
 
     // Load function
     #region LoadFunction
-    public static void LoadListFromJson(List<ActivityItem> list, string filename)
+    public static void LoadListFromJson<T>(List<T> list, string filename)
     {
         try
         {
@@ -75,10 +79,10 @@ public partial class MainWindow : Window
             else
             {
                 string json = File.ReadAllText(filename);
-                var activities = JsonSerializer.Deserialize<List<ActivityItem>>(json);
+                var items = JsonSerializer.Deserialize<List<T>>(json);
 
                 list.Clear();
-                foreach (var item in activities)
+                foreach (var item in items)
                 {
                     list.Add(item);
                 }
@@ -97,7 +101,7 @@ public partial class MainWindow : Window
 
     // Save function
     #region SaveFunction
-    public static void SaveListToJson(List<ActivityItem> list, string filename)
+    public static void SaveListToJson<T>(List<T> list, string filename)
     {
         var json = JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(filename, json);
@@ -105,14 +109,15 @@ public partial class MainWindow : Window
     }
 
     public SaveActivityDelegate saveMethod = SaveListToJson;
+    public SaveTrackerDelegate saveMethod2 = SaveListToJson;
 
     public void SaveAndExit_Click(object? sender, RoutedEventArgs e)
     {
         saveMethod(ActivityList);
+        saveMethod2(TrackerList);
         Environment.Exit(0);
     }
     #endregion
-
     // Refresh button
     public void Refresh_Click(object sender, RoutedEventArgs e)
     {
@@ -125,6 +130,13 @@ public partial class MainWindow : Window
         {
             if (DateTime.Now > item.WhenNeedToCheck())
             {
+                foreach (var element in TrackerList)
+                {
+                    if (item.ActivityName == element.TrackerName)
+                    {
+                        element.AddToList(item);
+                    }
+                }
                 item.TaskDone = 0;
 
                 try
@@ -135,11 +147,7 @@ public partial class MainWindow : Window
                         parentPanel.Children.Remove(border);
                         border.Background = Brushes.White;
                     }
-
-
                     activitiesPanelLeft.Children.Add(border);
-
-
                 }
                 catch (Exception ex)
                 {
@@ -148,7 +156,6 @@ public partial class MainWindow : Window
             }
         }
     }
-
     // Function for creating new Item
     #region NewItemCreation
     public void Button_Click(object sender, RoutedEventArgs e)
@@ -162,7 +169,6 @@ public partial class MainWindow : Window
             System.Console.WriteLine("Activity name cant be empty");
             return;
         }
-
         // same with drop-down menu
         if (string.IsNullOrWhiteSpace(Input_SelectedTime))
         {
@@ -179,7 +185,6 @@ public partial class MainWindow : Window
                 return;
             }
         }
-
         ActivityItem newActivity = null;
 
         if (Input_SelectedTime == "Daily")
@@ -195,8 +200,9 @@ public partial class MainWindow : Window
             newActivity = new ActivityItem(InputActivity!, new MonthlyActivity());
         }
 
+        Tracker newTracker = new Tracker(newActivity.ActivityName, newActivity);
+        TrackerList.Add(newTracker);
         ActivityList.Add(newActivity!);
-
         /*
         else if (Input_SelectedTime == "Other")
         {

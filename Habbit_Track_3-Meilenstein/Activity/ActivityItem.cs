@@ -8,6 +8,8 @@ public class ActivityItem : IActivity
     public int TaskDone { get; set; }
     public DateTime DateStart { get; set; }
 
+    Tracker activityTracker;
+
     [JsonIgnore]
     public ActivityBase TimeInterval { get; set; }
     // saving TimeInterval as string for Json
@@ -27,7 +29,6 @@ public class ActivityItem : IActivity
         ActivityName = activityName;
         TimeInterval = timeInterval;
         DateStart = DateTime.Now.Date;
-
     }
 
     public ActivityBase LoadTimeIntervalFromString(string type)

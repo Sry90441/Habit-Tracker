@@ -1,51 +1,56 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Net;
 using Avalonia.Rendering.Composition;
 using Habbit_Track_3_Meilenstein;
 
-class Tracker
+public class Tracker
 {
-    ActivityBase _trackedActivity;
-    List<int> _progressionInNumbers;
-    List<ActivityItem> _checkIn_s;
-    int _averageForTrack;
-    public Tracker(ActivityBase trackedActivity)
+    public List<ActivityItem> CheckIns { get; set; } = new List<ActivityItem>();
+    public ActivityItem Activity { get; set; }
+    public string TrackerName { get; set; }
+    public int CheckedIn { get; set; }
+    public int PartiallyChecked { get; set; }
+    public int NotChecked { get; set; }
+    public int TotalCheckIns { get; set; }
+
+    // Parameterloser Konstruktor notwendig für Deserialisierung
+    public Tracker() {}
+
+    public Tracker(string trackerName ,ActivityItem activity)
     {
-        _checkIn_s = new List<ActivityItem>();
-        _progressionInNumbers = new List<int>();
-        _trackedActivity = trackedActivity;
+        TrackerName = trackerName;
+        Activity = activity;
+        CheckIns = new List<ActivityItem>();
     }
-    public void AddProgres(ActivityItem progressionActivity)
+
+    public void AddToList(ActivityItem expiredActivity)
     {
-        _checkIn_s.Add(progressionActivity);
+        CheckIns.Add(expiredActivity);
+        Console.WriteLine("Tracking: " + TrackerName + " Not checked: " + NotChecked + " checked: " + CheckedIn);
+        TotalCheckIns++;
     }
-    public void TrackingProgress()
+
+    public void Tracking(int displayProgressOverTimeSpan)
     {
-        double count = 0;
-        foreach (ActivityItem item in _checkIn_s)
+        if (CheckedIn + PartiallyChecked + NotChecked != TotalCheckIns)
         {
-            count++;
-        }
-       
+            foreach (ActivityItem element in CheckIns)
+            {
+                if (element.TaskDone == 10)
+                {
+                    CheckedIn++;
+                }
+                else if (element.TaskDone == 5)
+                {
+                    NotChecked++;
+                }
+                else if (element.TaskDone == 0)
+                {
+                    TotalCheckIns++;
+                }
+            }
+        } 
     }
-    public void TrackedInXP()
-    {
-
-    }
-    /*
-    Nico Notes & ToDo's:
-
-    - zeitlicher abgleich und übergabe von Zeitwert
-    → 7 Tage, 2 Wochen, 1 Monat (4 Wochen), 3 Monate, Für immer()
-    dadurch ermitteln von mittel und ausgabe als diagram in form der Werte
-
-    → XP Verteilung    
-
-    Overall:
-    
-    → Beim schließen ungespeichert abfragen
-
-    */
-
 }
