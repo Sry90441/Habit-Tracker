@@ -7,6 +7,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia;
 using Avalonia.Controls.Shapes;
 using Avalonia.Media;
+using System;
 
 namespace Habbit_Track_3_Meilenstein;
 
@@ -67,35 +68,7 @@ public partial class TrackingWindow : Window
     }
     public void HandleAllTime()
     {
-        
-    }
 
-
-    
-    public void DrawDiagram()
-    {
-        var diagramCanvas = this.FindControl<Canvas>("DiagramCanvas");
-
-        var line = new Line
-        {
-            StartPoint = new Point(10, 10),
-            EndPoint = new Point(100, 100),
-            Stroke = Brushes.Black,
-            StrokeThickness = 2
-        };
-
-        var ellipse = new Ellipse
-        {
-            Width = 30,
-            Height = 30,
-            Fill = Brushes.Blue
-        };
-
-        Canvas.SetLeft(ellipse, 100);
-        Canvas.SetTop(ellipse, 50);
-
-        diagramCanvas.Children.Add(line);
-        diagramCanvas.Children.Add(ellipse);
     }
 
 }

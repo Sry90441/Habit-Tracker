@@ -7,11 +7,12 @@ public class ActivityItem : IActivity
     public string ActivityName { get; set; }
     public int TaskDone { get; set; }
     public DateTime DateStart { get; set; }
-
+    public DateTime LastCheckInDate { get; set; }
     Tracker activityTracker;
 
     [JsonIgnore]
     public ActivityBase TimeInterval { get; set; }
+    public DateTime DueDate { get; set; }
     // saving TimeInterval as string for Json
     public string TimeIntervalType
     {
@@ -28,7 +29,9 @@ public class ActivityItem : IActivity
         TaskDone = 0;
         ActivityName = activityName;
         TimeInterval = timeInterval;
-        DateStart = DateTime.Now.Date;
+        DateStart = DateTime.Now; // <-- Date ergänzen
+        DueDate = WhenNeedToCheck();
+        Console.WriteLine(DueDate);
     }
 
     public ActivityBase LoadTimeIntervalFromString(string type)
@@ -50,7 +53,7 @@ public class ActivityItem : IActivity
     // If the task is completed this time is set 
     public void CheckedInOnTime()
     {
-        DateStart = DateTime.Now;
+        DateStart = this.WhenNeedToCheck();
     }
 
     // Calculates the next time, the task needs to be done
@@ -58,4 +61,14 @@ public class ActivityItem : IActivity
     {
         return TimeInterval.GetDueDate(DateStart);
     }
+    
+    public ActivityItem Clone()
+    {
+        return new ActivityItem(this.ActivityName, this.TimeInterval) // oder wie du das intern speicherst
+        {
+            DateStart = this.DateStart,
+            TaskDone = this.TaskDone
+        };
+    }
+
 }

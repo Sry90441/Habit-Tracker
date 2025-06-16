@@ -10,12 +10,17 @@ using Avalonia.Dialogs.Internal;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Habbit_Track_3_Meilenstein;
+using Microsoft.VisualBasic;
 
 namespace Habbit_Track_3_Meilenstein;
 
-public delegate void SaveActivityDelegate(List<ActivityItem> list, string filename = "LordHaveMercy");
-public delegate void SaveTrackerDelegate(List<Tracker> list, string filename2 = "Tracking");    //Delegate for Save function
+//public delegate void SaveActivityDelegate(List<ActivityItem> list, string filename = "TestingActivity");
+//public delegate void SaveTrackerDelegate(List<Tracker> list, string filename2 = "TestingTracking");    //Delegate for Save function
+
+public delegate void SaveActivityDelegate(List<ActivityItem> list, string filename = "Save");
+public delegate void SaveTrackerDelegate(List<Tracker> list, string filename2 = "SaveT");  
 public delegate void ActivityButtonClickAction(ActivityItem activity);  // Delegate for Button functions
 
 public partial class MainWindow : Window
@@ -32,14 +37,16 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        LoadListFromJson(ActivityList, "LordHaveMercy");
-        LoadListFromJson(TrackerList, "Tracking");
+        //LoadListFromJson(ActivityList, "TestingActivity");
+        //LoadListFromJson(TrackerList, "TestingTracking");
+        LoadListFromJson(ActivityList, "Save");
+        LoadListFromJson(TrackerList, "SaveT");
 
         // Assign delegates to methods
         ActivityDoneMethod = SetActivityDone;
         ActivityPartiallyDoneMethod = SetActivityPartiallyDone;
         DeleteActivityMethod = DeleteActivity;
-
+         
         foreach (var item in ActivityList)
         {
             CreateUI(item);
@@ -63,6 +70,8 @@ public partial class MainWindow : Window
     public void DeleteActivity(ActivityItem activity)
     {
         ActivityList.Remove(activity);
+        var tracker = TrackerList.Find(a => a.TrackerName == activity.ActivityName);
+        TrackerList.Remove(tracker);
         System.Console.WriteLine($"{activity.ActivityName} removed!");
     }
 
@@ -128,16 +137,32 @@ public partial class MainWindow : Window
         // Check for due activities
         foreach (var item in ActivityList)
         {
+
             if (DateTime.Now > item.WhenNeedToCheck())
             {
+                Console.WriteLine("arsc");
                 foreach (var element in TrackerList)
                 {
-                    if (item.ActivityName == element.TrackerName)
+                    Console.WriteLine("fuck");
+                    if (item.ActivityName == element.TrackerName && item.TaskDone == 0)
                     {
+                        Console.WriteLine("yes");
+                        while (item.WhenNeedToCheck() < DateTime.Now)
+                        {
+                            element.AddToList(item);
+                            item.DateStart = item.WhenNeedToCheck();
+                            item.TaskDone = 0;
+                        }
+                    }
+                    else if (item.ActivityName == element.TrackerName && item.TaskDone > 0)
+                    {
+                        Console.WriteLine("=");
                         element.AddToList(item);
+                        item.DateStart = item.WhenNeedToCheck();
+                        item.TaskDone = 0;
                     }
                 }
-                item.TaskDone = 0;
+
 
                 try
                 {
@@ -155,8 +180,8 @@ public partial class MainWindow : Window
                 }
             }
         }
+
     }
-    // Function for creating new Item
     #region NewItemCreation
     public void Button_Click(object sender, RoutedEventArgs e)
     {
@@ -246,7 +271,7 @@ public partial class MainWindow : Window
         textBlock.PointerPressed += (sender, args) =>
         {
             var trackingWindow = new TrackingWindow(newActivity);
-            trackingWindow.Show(); 
+            trackingWindow.Show();
         };
         var typeBlock = new TextBlock
         {
@@ -266,7 +291,7 @@ public partial class MainWindow : Window
             Content = "Partially",
             Margin = new Thickness(5, 0, 0, 0)
         };
- 
+
         var removeButton = new Button
         {
             Content = "Delete Activity",
@@ -313,7 +338,7 @@ public partial class MainWindow : Window
                 {
                     System.Console.WriteLine("Can't set done activity to partially done!");
                 }
-                
+
             }
         };
 
@@ -341,7 +366,7 @@ public partial class MainWindow : Window
             activitiesPanelRight.Children.Add(border);
             border.Background = Brushes.Green;
         }
-        else if(newActivity.TaskDone == 5)
+        else if (newActivity.TaskDone == 5)
         {
             activitiesPanelLeft.Children.Add(border);
             border.Background = Brushes.Yellow;

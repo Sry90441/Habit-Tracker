@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Net;
 using Avalonia.Rendering.Composition;
 using Habbit_Track_3_Meilenstein;
+using System.Linq;
 
 public class Tracker
 {
@@ -15,10 +16,9 @@ public class Tracker
     public int NotChecked { get; set; }
     public int TotalCheckIns { get; set; }
 
-    // Parameterloser Konstruktor notwendig für Deserialisierung
-    public Tracker() {}
+    public Tracker() { }
 
-    public Tracker(string trackerName ,ActivityItem activity)
+    public Tracker(string trackerName, ActivityItem activity)
     {
         TrackerName = trackerName;
         Activity = activity;
@@ -27,30 +27,30 @@ public class Tracker
 
     public void AddToList(ActivityItem expiredActivity)
     {
-        CheckIns.Add(expiredActivity);
-        Console.WriteLine("Tracking: " + TrackerName + " Not checked: " + NotChecked + " checked: " + CheckedIn);
-        TotalCheckIns++;
-    }
+            ActivityItem expired = expiredActivity.Clone();
+            CheckIns.Add(expired);
+            TotalCheckIns++;
+            Tracking();
+            Console.WriteLine("Tracking: " + TrackerName + " Not checked: " + NotChecked + " checked: " + CheckedIn +  "partially " + PartiallyChecked);
+        
 
-    public void Tracking(int displayProgressOverTimeSpan)
+    }
+    public void Tracking(int displayProgressOverTimeSpan = 0)
     {
-        if (CheckedIn + PartiallyChecked + NotChecked != TotalCheckIns)
+        
+        CheckedIn = 0;
+        PartiallyChecked = 0;
+        NotChecked = 0; 
+        System.Console.WriteLine("Start Tracking");
+        foreach (ActivityItem element in CheckIns)
         {
-            foreach (ActivityItem element in CheckIns)
+            Console.WriteLine("Tracking Tracking Tracking");
+            switch (element.TaskDone)
             {
-                if (element.TaskDone == 10)
-                {
-                    CheckedIn++;
-                }
-                else if (element.TaskDone == 5)
-                {
-                    NotChecked++;
-                }
-                else if (element.TaskDone == 0)
-                {
-                    TotalCheckIns++;
-                }
+                case 10: CheckedIn++; break;
+                case 5: PartiallyChecked++; break;
+                case 0: NotChecked++; break;
             }
-        } 
+        }
     }
 }
